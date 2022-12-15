@@ -12,12 +12,12 @@ import java.util.concurrent.ThreadLocalRandom;
 public class SimpleController {
 
     private static final String[] MESSAGES = {
-            "Hello from backend!",
-            "Meu nome é Ari, não tô nem aí!",
-            "Bora Bill!",
-            "Imagine uma nova história para sua vida e acredite nela.",
-            "Tente mover o mundo – o primeiro passo será mover a si mesmo.",
-            "Quando vires um homem bom, tenta imitá-lo; quando vires um homem mau, examina-te a ti mesmo."
+            "I asked God for a bike, but I know God doesn't work that way. So I stole a bike and asked for forgiveness.",
+            "I didn't fall down. I did attack the floor, though.",
+            "Come over to the dark side…we’ve got candy.",
+            "I don’t suffer from insanity, I enjoy every minute of it.",
+            "I like to be an optimist. It pisses people off.",
+            "He who wakes up early, yawns all day long."
     };
 
     @GetMapping("/message")
