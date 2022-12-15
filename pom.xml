@@ -12,7 +12,7 @@
     </parent>
 
     <groupId>br.com.ari</groupId>
-    <artifactId>keycloak-nginx-proxy</artifactId>
+    <artifactId>keycloak-nginx-example</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>pom</packaging>
 
