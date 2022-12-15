@@ -14,6 +14,10 @@ msg() {
      echo -e "#$(date +%F-%H-%M-%S.%N) SHELL: $*\n"
 }
 
+msg "Starting the database..."
+docker-compose -f ../docker-compose.yaml up -d nginx-database
+echo ""
+
 msg "Starting a Keycloak container to proceed with the realm export..."
 docker run \
     -e KC_DB=mariadb \
@@ -22,7 +26,7 @@ docker run \
     -e KC_DB_SCHEMA=keycloak \
     -e KC_DB_USERNAME=keycloak \
     -e KC_DB_PASSWORD=keycloakpwd \
-    --network keycloak-nginx-proxy_default \
+    --network keycloak-nginx-example_default \
     nginx-keycloak-service:latest \
     export --file /tmp/${KC_EXPORT_FILE_NAME} --realm keycloak-nginx-test
 
@@ -33,3 +37,5 @@ docker cp "$(docker ps -alq):/tmp/${KC_EXPORT_FILE_NAME}" ${KC_FINAL_DIRECTORY}
 
 msg "Deleting Keycloak container"
 docker container rm "$(docker ps -alq)"
+
+docker-compose -f ../docker-compose.yaml down
