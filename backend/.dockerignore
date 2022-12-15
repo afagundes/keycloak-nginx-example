@@ -1,0 +1,9 @@
+src/
+.idea/
+.git/
+
+*.iml
+Dockerfile*
+docker-compose*
+.dockerignore
+.gitignore

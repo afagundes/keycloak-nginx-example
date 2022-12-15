@@ -1,0 +1,77 @@
+version: "3.7"
+
+services:
+
+  nginx-database:
+    image: mariadb:latest
+    container_name: nginx-database
+    environment:
+      - MARIADB_ROOT_PASSWORD=rootpwd
+      - MARIADB_USER=keycloak
+      - MARIADB_PASSWORD=keycloakpwd
+      - MARIADB_DATABASE=keycloak
+    volumes:
+      - nginx-database-data:/var/lib/mysql
+    healthcheck:
+      test: "mysql -uroot -prootpwd mysql -e 'select 1'"
+      timeout: 5s
+      retries: 10
+      start_period: 5s
+      interval: 1s
+
+  nginx-keycloak-service:
+    build:
+      context: keycloak
+    image: nginx-keycloak-service:latest
+    container_name: nginx-keycloak-service
+    environment:
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+      KC_DB: mariadb
+      KC_DB_URL_HOST: nginx-database
+      KC_DB_URL_PORT: 3306
+      KC_DB_SCHEMA: keycloak
+      KC_DB_USERNAME: keycloak
+      KC_DB_PASSWORD: keycloakpwd
+      KC_HOSTNAME_URL: http://keycloak-nginx-proxy/auth
+      KC_HOSTNAME_STRICT_HTTPS: "false"
+      KC_HOSTNAME_STRICT: "false"
+      KC_HOSTNAME_STRICT_BACKCHANNEL: "false"
+    ports:
+      - "8080:8080"
+    command:
+      - start-dev --import-realm --optimized --proxy=edge
+    depends_on:
+      nginx-database:
+        condition: service_healthy
+
+  nginx-backend-service:
+    build:
+      context: backend
+    image:  nginx-backend-service:latest
+    container_name:  nginx-backend-service
+    environment:
+      KEYCLOAK_AUTH_SERVER_URL: http://nginx-keycloak-service:8080/auth
+
+  nginx-frontend-service:
+    build:
+      context: frontend
+    image:  nginx-frontend-service:latest
+    container_name:  nginx-frontend-service
+
+  nginx-service:
+    build:
+      context: nginx
+    image: nginx-service
+    container_name: nginx-service
+    restart: on-failure
+    ports:
+      - "80:80"
+    depends_on:
+      nginx-database:
+        condition: service_healthy
+      nginx-keycloak-service:
+        condition: service_started
+
+volumes:
+  nginx-database-data:
