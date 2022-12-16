@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Use this script to export a Keycloak configuration.
-# Exported file will be saved at nava-alma_licence-server/keycloak/config/realm-config.json.
+# Exported file will be saved at keycloak/config/realm-config.json.
 #
 # The database Keycloak uses must be up and running.
 #
