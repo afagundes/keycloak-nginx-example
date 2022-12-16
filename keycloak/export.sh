@@ -3,9 +3,7 @@
 # Use this script to export a Keycloak configuration.
 # Exported file will be saved at keycloak/config/realm-config.json.
 #
-# The database Keycloak uses must be up and running.
-#
-# Usage: ./export-keycloak-config.sh
+# Usage: ./export.sh
 
 KC_EXPORT_FILE_NAME=realm-config.json
 KC_FINAL_DIRECTORY=./config
